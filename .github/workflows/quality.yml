@@ -1,0 +1,33 @@
+name: Webchek tools and Lighthouse CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx --no-install playwright install --with-deps chromium
+      - name: Select installed browser
+        run: node --input-type=module -e "import {chromium} from 'playwright'; import {appendFileSync} from 'node:fs'; appendFileSync(process.env.GITHUB_ENV, 'WEBCHEK_BROWSER=' + chromium.executablePath() + '\n');"
+      - run: npm test
+      - name: Lighthouse CI against local integration fixture
+        if: ${{ !cancelled() }}
+        run: npm run ci:smoke
+      - name: Save Lighthouse CI reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-ci-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/lhci/
+          include-hidden-files: true
+          retention-days: 7

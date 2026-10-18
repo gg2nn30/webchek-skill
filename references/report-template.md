@@ -81,13 +81,13 @@ Sicherheitsbefunde benötigen Voraussetzungen, Auswirkung und redigierte Evidenz
 Freigabeempfehlung auf tatsächlich geprüfte Kriterien begrenzen; keine automatische
 Veröffentlichung, keine erfundenen Testzahlen und keine ungeprüften Artefakt-Uploads.
 
-## Suchplattformen (bei vorhandenem Auftrag)
+## Suchplattformen und CI (bei vorhandenem Auftrag)
 
-Suchplattform-Zugänge bei Bedarf separat erfassen:
+Suchplattform-Zugänge und technische CI-Nachweise bei Bedarf separat erfassen:
 
 | Provider / Lauf | Property oder Ziel-URLs | Zugriff bestätigt? | Zeitraum / Messprofil | Bericht / Stufen-Exitcodes | Grenzen |
 | --- | --- | --- | --- | --- | --- |
-| [Search Console / Bing] | [exakte Property] | [ja/nein; Variablenpräsenz reicht nicht] | [tatsächlich verfügbarer Zeitraum / Version] | [aktueller Pfad] | [Quota, fehlende Rechte] |
+| [Search Console / Bing / LHCI] | [exakte Property / Fixture kennzeichnen] | [ja/nein; Variablenpräsenz reicht nicht] | [tatsächlich verfügbarer Zeitraum / Version] | [aktueller Pfad] | [Quota, fehlende Rechte, Budget statt Baseline-Vergleich] |
 
 ## GEO-Messprotokoll (bei gewähltem Modul)
 

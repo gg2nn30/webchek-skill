@@ -71,7 +71,7 @@ Details, Grenzen und Browser-Voraussetzungen: [Werkzeuge](references/tools.md).
 
 Rankings, Rich Results und Erwähnungen in KI-Antworten werden nicht garantiert.
 
-## Suchplattformen
+## Suchplattformen und Regressionen
 
 [Search Console und Bing Webmaster Tools](references/search-platforms.md) sind
 über lesende Adapter vorbereitet. Vorhandene Credentials werden aus der Umgebung
@@ -82,3 +82,15 @@ npm run webmaster -- --check-access
 npm run webmaster -- --provider google
 npm run webmaster -- --provider bing
 ```
+
+[Lighthouse CI](references/lighthouse-ci.md) führt drei Messläufe je expliziter
+Ziel-URL aus und prüft Median-Scores gegen konfigurierbare Budgets:
+
+```bash
+WEBCHEK_CI_URLS='["https://example.com/"]' npm run ci:audit
+WEBCHEK_BROWSER=/usr/bin/chromium npm run ci:smoke
+```
+
+Der GitHub-Workflow prüft nach einem Push die Werkzeuge an einer lokalen Fixture.
+Eine tatsächliche Website muss mit eigenen URLs und gegebenenfalls Build-/Start-
+Schritten eingebunden werden. Es werden keine bezahlten GEO-Dienste eingerichtet.
