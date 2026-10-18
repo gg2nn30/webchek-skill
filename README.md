@@ -70,3 +70,15 @@ Mit `npm test` lässt sich die Integration an einer lokalen Testwebsite prüfen.
 Details, Grenzen und Browser-Voraussetzungen: [Werkzeuge](references/tools.md).
 
 Rankings, Rich Results und Erwähnungen in KI-Antworten werden nicht garantiert.
+
+## Suchplattformen
+
+[Search Console und Bing Webmaster Tools](references/search-platforms.md) sind
+über lesende Adapter vorbereitet. Vorhandene Credentials werden aus der Umgebung
+genutzt; ohne sie ist noch kein Kontozugriff bestätigt:
+
+```bash
+npm run webmaster -- --check-access
+npm run webmaster -- --provider google
+npm run webmaster -- --provider bing
+```
