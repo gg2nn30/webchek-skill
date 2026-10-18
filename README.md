@@ -26,7 +26,9 @@ nach Auftrag ausgewählt; fehlender Zugriff wird als Prüfgrenze dokumentiert.
 [Quellen und Anpassungen](references/sources.md) halten die Herkunft fest.
 Für die Adaptionen aus marketingskills sind die
 [MIT-Lizenzhinweise](THIRD_PARTY_NOTICES.md) beigefügt.
-Die Module enthalten Anleitungen. Claude-spezifische Konfiguration wird nicht benötigt.
+Die Module enthalten Anleitungen; die [Werkzeuganbindung](references/tools.md)
+führt zusätzlich Lighthouse-, Playwright- und axe-core-Prüfungen aus.
+Claude-spezifische Konfiguration wird nicht benötigt.
 
 In einem Agenten, der lokale Skills unterstützt, das Repository als Skill-Paket
 einbinden oder dessen `SKILL.md` ausdrücklich zum Lesen angeben. Das Speichern im
@@ -47,5 +49,24 @@ Für GEO zusätzlich beispielsweise:
 Für einen öffentlichen Basischeck genügt eine URL. Search Console, Analytics,
 Serverlogs und interne Conversion-Daten ergänzen das Audit, wenn entsprechender
 Zugriff vorhanden ist. Fehlender Zugriff wird als Prüfgrenze ausgewiesen.
+
+## Ausführbare Prüfungen
+
+Die Markdown-Anleitungen funktionieren ohne Installation. Für die Prüfwerkzeuge
+Node.js >= 22.19 und Chromium verwenden:
+
+```bash
+npm ci --ignore-scripts
+npx --no-install playwright install chromium
+npm run audit -- --url https://example.com
+```
+
+Ein vorhandener Chromium kann mit `--browser /absoluter/pfad` gewählt werden.
+Einzelprüfungen: `npm run audit:browser`, `npm run audit:axe`,
+`npm run audit:lighthouse`, jeweils mit `-- --url URL`.
+Berichte liegen je Lauf separat unter `artifacts/run-*`. Exitcodes:
+0 = gewählte Gates bestanden, 1 = Befunde, 2 = Werkzeug-/Konfigurationsfehler.
+Mit `npm test` lässt sich die Integration an einer lokalen Testwebsite prüfen.
+Details, Grenzen und Browser-Voraussetzungen: [Werkzeuge](references/tools.md).
 
 Rankings, Rich Results und Erwähnungen in KI-Antworten werden nicht garantiert.

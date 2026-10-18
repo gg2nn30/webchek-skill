@@ -36,6 +36,10 @@ Antworte in der Sprache des Nutzers, standardmäßig Deutsch.
    für einen Basischeck. Nutze vorhandene autorisierte Search-Console-, Analytics-
    oder Log-Zugriffe; frage niemals nach Passwörtern oder Secret-Werten im Chat.
    Ohne solche Zugriffe bleiben entsprechende Prüfungen offen.
+   Für ausführbare Browser-, Lighthouse- und axe-Prüfungen lies
+   [Werkzeuge und Berichte](references/tools.md). Nutze die dort dokumentierten
+   Projektbefehle, beachte Exitcodes und ordne ihre Ergebnisse den Audit-Checks zu.
+   Ein Smoke-Check ersetzt keine vollständigen E2E-Nutzerpfade.
 4. Bestimme Website-Typ und wichtige Seitentypen. Prüfe mindestens Startseite,
    eine zentrale Angebots-/Kategorie-/Leistungsseite, eine Detailseite sowie
    Kontakt oder den Beginn des Conversion-Pfads, soweit vorhanden. Ergänze Blog,
