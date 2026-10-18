@@ -3,6 +3,13 @@
 Wiederverwendbarer Skill für SEO-, GEO- und Website-Audits: technische Auffindbarkeit,
 Inhalte, mobile Nutzung, Barrierefreiheit, Conversion und laufende Kontrolle.
 
+## Projektdokumentation
+
+- [Produktbeschreibung](PRD.md): Zielgruppe, Funktionen, Tarife, Nicht-Ziele und offene Entscheidungen.
+- [Designsystem](DESIGN_SYSTEM.md): belegte Codewerte und noch offene UI-Vorgaben.
+- [Architektur](ARCHITECTURE.md): Dateien, Abläufe, Daten, Sicherheit und Einstellungen.
+- [Regeln für KI-Assistenten](AGENTS.md): Sprache, Technik, Prüfungen und PR-Workflow.
+
 ## Verwendung
 
 Der Einstiegspunkt ist [SKILL.md](SKILL.md). Die vollständigen Prüfkriterien stehen
