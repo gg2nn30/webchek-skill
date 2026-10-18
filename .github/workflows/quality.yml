@@ -7,7 +7,8 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Use the runner's packaged Chrome and its OS sandbox integration.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -16,18 +17,34 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npx --no-install playwright install --with-deps chromium
-      - name: Select installed browser
-        run: node --input-type=module -e "import {chromium} from 'playwright'; import {appendFileSync} from 'node:fs'; appendFileSync(process.env.GITHUB_ENV, 'WEBCHEK_BROWSER=' + chromium.executablePath() + '\n');"
-      - run: npm test
+      - name: Select system Chrome
+        run: |
+          browser_path="$(command -v google-chrome)"
+          test -x "$browser_path"
+          echo "WEBCHEK_BROWSER=$browser_path" >> "$GITHUB_ENV"
+          mkdir -p artifacts/ci/tests
+          echo "TMPDIR=$GITHUB_WORKSPACE/artifacts/ci/tests" >> "$GITHUB_ENV"
+      - name: Verify sandboxed browser startup
+        id: browser
+        run: |
+          set -o pipefail
+          node scripts/browser-preflight.mjs 2>&1 | tee artifacts/ci/browser.log
+      - name: Run tests
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee artifacts/ci/tests.log
       - name: Lighthouse CI against local integration fixture
-        if: ${{ !cancelled() }}
-        run: npm run ci:smoke
-      - name: Save Lighthouse CI reports
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          npm run ci:smoke 2>&1 | tee artifacts/ci/lighthouse.log
+      - name: Save fixture diagnostics and Lighthouse CI reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-ci-${{ github.run_id }}-${{ github.run_attempt }}
-          path: artifacts/lhci/
+          path: |
+            artifacts/lhci/
+            artifacts/ci/
           include-hidden-files: true
           retention-days: 7

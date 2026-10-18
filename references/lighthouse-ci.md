@@ -59,8 +59,19 @@ oder Exportproblem. Ein `running`-Bericht ist unvollständig.
 
 ## GitHub Actions und lokale Validierung
 
-`.github/workflows/quality.yml` installiert die gepinnten Abhängigkeiten und den
-Playwright-Browser, führt unsere Tests aus und prüft eine lokale CI-Fixture.
+`.github/workflows/quality.yml` installiert die gepinnten Abhängigkeiten und nutzt
+System-Chrome des festgelegten Ubuntu-24.04-Runners, führt unsere Tests aus und
+prüft eine lokale CI-Fixture. Playwright und Lighthouse verwenden denselben
+expliziten Browserpfad. Es wird kein zusätzlicher Playwright-Chromium heruntergeladen.
+Ein vorgeschalteter Browser-Starttest prüft mit aktiver Sandbox, ob eine lokale
+Seite gerendert werden kann, und protokolliert Browserpfad und Version.
+Ubuntu kann heruntergeladene Browser durch AppArmor-/User-Namespace-Regeln
+einschränken; System-Chrome nutzt die Betriebssystemintegration. Dies ist eine
+Kompatibilitätsmaßnahme, kein nachträglicher Beweis für die Ursache eines alten
+CI-Fehlers. Die Sandbox und Qualitätsgrenzen bleiben unverändert aktiv.
+Wenn der Starttest fehlschlägt, werden abhängige Browserprüfungen nicht gestartet.
+Die genaue Browser-Version stammt weiterhin vom Runner und steht im Protokoll;
+das Pinning des OS-Labels pinnt nicht das vollständige Runner-Image.
 Diese Prüfung bestätigt die Werkzeuganbindung, nicht eine Kundenwebsite.
 Der Workflow wird erst nach Push auf GitHub ausgeführt; lokale Tests beweisen
 keinen erfolgreichen GitHub-Actions-Lauf.
@@ -69,15 +80,28 @@ keinen erfolgreichen GitHub-Actions-Lauf.
 WEBCHEK_BROWSER=/usr/bin/chromium npm run ci:smoke
 ```
 
+Den Browser-Starttest separat ausführen:
+
+```bash
+WEBCHEK_BROWSER=/usr/bin/chromium node scripts/browser-preflight.mjs
+```
+
+Bei einem fehlerhaften Browserpfad endet dieser Test mit Code 2; ein erfolgreicher
+Lauf mit Code 0. Er ruft keine externe Website auf und deaktiviert die Sandbox nicht.
+
 Mit `npm run ci:smoke -- --broken` wird absichtlich eine fehlerhafte Fixture
 geprüft. Erwartet wird Exitcode 1 und ein erhaltener Ergebnisordner. Dies dient
 der Validierung, dass die Gates tatsächlich Fehler erkennen.
 
-GitHub Actions speichert ausschließlich die Fixture-Berichte sieben Tage als
+GitHub Actions speichert ausschließlich Fixture-Berichte und zugehörige
+Test-/Browser-/Lighthouse-Protokolle sieben Tage als
 Workflow-Artefakte. Zugriff richtet sich nach Repository-/Actions-Sichtbarkeit;
 das ist keine private Ablage für vertrauliche Website-Daten. Webmaster-Daten
 und Secrets gehören nicht in diese Uploads. Ein echter Website-Workflow benötigt
 deren Build-/Startschritte und passende Ziele anstelle der Fixture.
+Die Protokolle liegen in `artifacts/ci/`, Lighthouse-CI-Berichte in
+`artifacts/lhci/`. Shell-`pipefail` erhält Fehlercodes trotz Protokollkopie mit
+`tee`. Auch bei fehlgeschlagenen Tests werden vorhandene Diagnosen hochgeladen.
 
 ## Kostenpflichtige GEO-Dienste
 
