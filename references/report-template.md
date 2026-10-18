@@ -81,6 +81,14 @@ Sicherheitsbefunde benötigen Voraussetzungen, Auswirkung und redigierte Evidenz
 Freigabeempfehlung auf tatsächlich geprüfte Kriterien begrenzen; keine automatische
 Veröffentlichung, keine erfundenen Testzahlen und keine ungeprüften Artefakt-Uploads.
 
+## Suchplattformen (bei vorhandenem Auftrag)
+
+Suchplattform-Zugänge bei Bedarf separat erfassen:
+
+| Provider / Lauf | Property oder Ziel-URLs | Zugriff bestätigt? | Zeitraum / Messprofil | Bericht / Stufen-Exitcodes | Grenzen |
+| --- | --- | --- | --- | --- | --- |
+| [Search Console / Bing] | [exakte Property] | [ja/nein; Variablenpräsenz reicht nicht] | [tatsächlich verfügbarer Zeitraum / Version] | [aktueller Pfad] | [Quota, fehlende Rechte] |
+
 ## GEO-Messprotokoll (bei gewähltem Modul)
 
 Messziel, Fragen-Set-Version, Plattform/Interface, Modell soweit bekannt,
