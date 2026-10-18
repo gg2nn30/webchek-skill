@@ -1,0 +1,50 @@
+name: Webchek tools and Lighthouse CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    # Use the runner's packaged Chrome and its OS sandbox integration.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Select system Chrome
+        run: |
+          browser_path="$(command -v google-chrome)"
+          test -x "$browser_path"
+          echo "WEBCHEK_BROWSER=$browser_path" >> "$GITHUB_ENV"
+          mkdir -p artifacts/ci/tests
+          echo "TMPDIR=$GITHUB_WORKSPACE/artifacts/ci/tests" >> "$GITHUB_ENV"
+      - name: Verify sandboxed browser startup
+        id: browser
+        run: |
+          set -o pipefail
+          node scripts/browser-preflight.mjs 2>&1 | tee artifacts/ci/browser.log
+      - name: Run tests
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee artifacts/ci/tests.log
+      - name: Lighthouse CI against local integration fixture
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          npm run ci:smoke 2>&1 | tee artifacts/ci/lighthouse.log
+      - name: Save fixture diagnostics and Lighthouse CI reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-ci-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            artifacts/lhci/
+            artifacts/ci/
+          include-hidden-files: true
+          retention-days: 7

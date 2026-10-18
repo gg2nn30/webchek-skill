@@ -41,8 +41,10 @@ Antworte in der Sprache des Nutzers, standardmäßig Deutsch.
    Projektbefehle, beachte Exitcodes und ordne ihre Ergebnisse den Audit-Checks zu.
    Ein Smoke-Check ersetzt keine vollständigen E2E-Nutzerpfade.
    Für vorhandene Suchplattform-Zugänge lies
-   [Search Console und Bing](references/search-platforms.md). Ohne Credentials
-   keinen Live-Zugriff behaupten.
+   [Search Console und Bing](references/search-platforms.md); für laufende
+   technische Gates [Lighthouse CI](references/lighthouse-ci.md). Ohne Credentials
+   keinen Live-Zugriff behaupten. CI-Fixture-Ergebnisse nicht als Website-Audit
+   ausgeben. Kostenpflichtige GEO-Vergleiche erst bei geklärtem Umfang und Budget.
 4. Bestimme Website-Typ und wichtige Seitentypen. Prüfe mindestens Startseite,
    eine zentrale Angebots-/Kategorie-/Leistungsseite, eine Detailseite sowie
    Kontakt oder den Beginn des Conversion-Pfads, soweit vorhanden. Ergänze Blog,
